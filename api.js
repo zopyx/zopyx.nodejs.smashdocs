@@ -6,17 +6,18 @@ var fs = require('fs');
 
 class SMASHDOCs {
 
-    constructor(partner_url, client_id, client_key, group_id, verbose=false) {
+    constructor(partner_url, client_id, client_key, group_id, verbose = false) {
         this.partner_url = partner_url;
         this.client_id = client_id;
         this.client_key = client_key;
         this.group_id = group_id
         this.verbose = verbose;
-        require('request').debug = verbose;;
+        require('request').debug = verbose;
+        ;
     }
 
     get_token() {
-        var iat = Math.round(new Date().getTime()/1000);
+        var iat = Math.round(new Date().getTime() / 1000);
         var payload = {
             'iat': iat,
             'iss': uuidV4(),
@@ -33,12 +34,13 @@ class SMASHDOCs {
             'authorization': 'Bearer ' + this.get_token()
         }
     }
+
     list_templates() {
 
         var url = partner_url + '/partner/templates/word';
         var options = {
-          url: url,
-          headers: this.headers(),
+            url: url,
+            headers: this.headers(),
         };
 
         var result;
@@ -50,13 +52,13 @@ class SMASHDOCs {
                 throw new Error(msg);
             }
         });
-        while(result === undefined) {
+        while (result === undefined) {
             require('deasync').runLoopOnce();
         }
         return JSON.parse(result);
     }
 
-    new_document(title='', description='', role='editor', status='draft', user_data=null) {
+    new_document(title = '', description = '', role = 'editor', status = 'draft', user_data = null) {
 
         var data = {
             'user': user_data,
@@ -70,9 +72,9 @@ class SMASHDOCs {
 
         var url = partner_url + '/partner/documents/create';
         var options = {
-          url: url,
-          json: data,
-          headers: this.headers(),
+            url: url,
+            json: data,
+            headers: this.headers(),
         };
 
         var result;
@@ -84,7 +86,7 @@ class SMASHDOCs {
                 throw new Error(msg);
             }
         });
-        while(result === undefined) {
+        while (result === undefined) {
             require('deasync').runLoopOnce();
         }
         return result;
@@ -94,8 +96,8 @@ class SMASHDOCs {
 
         var url = partner_url + `/partner/documents/${document_id}/archive`;
         var options = {
-          url: url,
-          headers: this.headers(),
+            url: url,
+            headers: this.headers(),
         };
 
         var result;
@@ -107,7 +109,7 @@ class SMASHDOCs {
                 throw new Error(msg);
             }
         });
-        while(result === undefined) {
+        while (result === undefined) {
             require('deasync').runLoopOnce();
         }
         return result;
@@ -117,8 +119,8 @@ class SMASHDOCs {
 
         var url = partner_url + `/partner/documents/${document_id}/unarchive`;
         var options = {
-          url: url,
-          headers: this.headers(),
+            url: url,
+            headers: this.headers(),
         };
 
         var result;
@@ -130,7 +132,7 @@ class SMASHDOCs {
                 throw new Error(msg);
             }
         });
-        while(result === undefined) {
+        while (result === undefined) {
             require('deasync').runLoopOnce();
         }
         return result;
@@ -141,8 +143,8 @@ class SMASHDOCs {
 
         var url = partner_url + `/partner/documents/${document_id}`;
         var options = {
-          url: url,
-          headers: this.headers(),
+            url: url,
+            headers: this.headers(),
         };
 
         var result;
@@ -154,7 +156,7 @@ class SMASHDOCs {
                 throw new Error(msg);
             }
         });
-        while(result === undefined) {
+        while (result === undefined) {
             require('deasync').runLoopOnce();
         }
         return result;
@@ -164,8 +166,8 @@ class SMASHDOCs {
 
         var url = partner_url + `/partner/documents/${document_id}`;
         var options = {
-          url: url,
-          headers: this.headers(),
+            url: url,
+            headers: this.headers(),
         };
 
         var result;
@@ -177,32 +179,32 @@ class SMASHDOCs {
                 throw new Error(msg);
             }
         });
-        while(result === undefined) {
+        while (result === undefined) {
             require('deasync').runLoopOnce();
         }
         return JSON.parse(result);
     }
 
-    export_document(document_id, user_id='', format='docx', template_id=null) {
+    export_document(document_id, user_id = '', format = 'docx', template_id = null) {
 
-        var data = { userId: user_id};
+        var data = {userId: user_id};
 
         if (format == 'docx') {
             var url = partner_url + `/partner/documents/${document_id}/export/word`;
             data['templateId'] = template_id;
             data['settings'] = {};
-        } else if (format == 'sdxml'){
+        } else if (format == 'sdxml') {
             var url = partner_url + `/partner/documents/${document_id}/export/sdxml`;
         } else {
             var url = partner_url + `/partner/documents/${document_id}/export/html`;
         }
 
         var options = {
-          url: url,
-          json: data,
-          headers: this.headers(),
+            url: url,
+            json: data,
+            headers: this.headers(),
         };
-        
+
         var suffix = (['sdxml', 'html'].indexOf(format) != -1) ? 'zip' : format;
         var fn_out = `${format}_out.${suffix}`
 
@@ -214,7 +216,7 @@ class SMASHDOCs {
                 throw new Error(msg);
             }
         }).pipe(fs.createWriteStream(fn_out));
-        while(result === undefined) {
+        while (result === undefined) {
             require('deasync').runLoopOnce();
         }
         return fn_out;
