@@ -64,6 +64,29 @@ class SMASHDOCs {
         }
         return result;
     }
+
+    delete_document(document_id) {
+
+        var url = partner_url + `/partner/documents/${document_id}`;
+        console.log(url);
+        var options = {
+          url: url,
+          headers: this.headers(),
+        };
+
+        var result;
+        request.delete(options, function (error, response, body) {
+            if (response.statusCode == 200) {
+                result = body;
+            } else {
+                throw new Error(error);
+            }
+        });
+        while(result === undefined) {
+            require('deasync').runLoopOnce();
+        }
+        return result;
+    }
 }
 
 var user_data = {
@@ -83,3 +106,6 @@ SD = new SMASHDOCs(partner_url, client_id, client_key, 'sample-grp');
 var result = SD.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
 console.log(result['documentAccessLink']);
 console.log(result['documentId']);
+var document_id = result['documentId'];
+
+SD.delete_document(document_id);
