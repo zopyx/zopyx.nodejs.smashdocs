@@ -301,11 +301,11 @@ class SMASHDOCs {
 }
 
 var user_data = {
-    'firstname': 'Andreas',
-    'lastname': 'Jung',
+    'firstname': 'Hans',
+    'lastname': 'Schlumpf',
     'email': 'foo@bar.org',
     'company': 'The Foo Company',
-    'userId': 'ajung'
+    'userId': 'schlumpf'
 };
 
 var client_id = process.env.SMASHDOCS_CLIENT_ID;
@@ -318,12 +318,12 @@ SD = new SMASHDOCs(partner_url, client_id, client_key, 'sample-grp', 1);
 var result = SD.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
 var document_id = result['documentId'];
 var doc_info = SD.document_info(document_id);
-console.log(SD.duplicate_document(document_id, 'new_title', 'new_description', 'ajung'));
+console.log(SD.duplicate_document(document_id, 'new_title', 'new_description', 'schlumpf'));
 var templates = SD.list_templates();
-console.log(SD.export_document(document_id, 'ajung', 'sdxml'));
-console.log(SD.export_document(document_id, 'ajung', 'html'));
+console.log(SD.export_document(document_id, 'schlumpf', 'sdxml'));
+console.log(SD.export_document(document_id, 'schlumpf', 'html'));
 console.log(templates[0]);
-console.log(SD.export_document(document_id, 'ajung', 'docx', templates[0]['id']));
+console.log(SD.export_document(document_id, 'schlumpf', 'docx', templates[0]['id']));
 SD.archive_document(document_id);
 SD.unarchive_document(document_id);
 SD.delete_document(document_id);
