@@ -315,7 +315,6 @@ var partner_url = process.env.SMASHDOCS_PARTNER_URL;
 
 SD = new SMASHDOCs(partner_url, client_id, client_key, 'sample-grp', 1);
 
-
 var result = SD.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
 var document_id = result['documentId'];
 var doc_info = SD.document_info(document_id);
