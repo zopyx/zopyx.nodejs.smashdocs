@@ -46,7 +46,8 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                throw new Error(error);
+                var msg = `HTTP call failed (${url}, ${body})`;
+                throw new Error(msg);
             }
         });
         while(result === undefined) {
@@ -79,7 +80,8 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                throw new Error(error);
+                var msg = `HTTP call failed (${url}, ${body})`;
+                throw new Error(msg);
             }
         });
         while(result === undefined) {
@@ -101,7 +103,8 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                throw new Error(error);
+                var msg = `HTTP call failed (${url}, ${body})`;
+                throw new Error(msg);
             }
         });
         while(result === undefined) {
@@ -123,7 +126,8 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                throw new Error(error);
+                var msg = `HTTP call failed (${url}, ${body})`;
+                throw new Error(msg);
             }
         });
         while(result === undefined) {
@@ -146,7 +150,8 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                throw new Error(error);
+                var msg = `HTTP call failed (${url}, ${body})`;
+                throw new Error(msg);
             }
         });
         while(result === undefined) {
@@ -168,7 +173,8 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                throw new Error(error);
+                var msg = `HTTP call failed (${url}, ${body})`;
+                throw new Error(msg);
             }
         });
         while(result === undefined) {
@@ -204,9 +210,8 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                console.log(error);
-                console.log(body);
-                throw new Error(error);
+                var msg = `HTTP call failed (${url}, ${body})`;
+                throw new Error(msg);
             }
         }).pipe(fs.createWriteStream(fn_out));
         while(result === undefined) {
