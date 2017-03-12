@@ -1,8 +1,7 @@
 var jwt = require('json-web-token');
+var uuidV4 = require('uuid/v4');
+var request = require('request');
 
-var client_id = process.env.SMASHDOCS_CLIENT_ID;
-var client_key = process.env.SMASHDOCS_CLIENT_KEY;
-var partner_url = process.env.SMASHDOCS_PARTNER_URL;
 
 class SMASHDOCs {
 
@@ -15,7 +14,6 @@ class SMASHDOCs {
     }
 
     get_token() {
-        const uuidV4 = require('uuid/v4');
         var iat = Math.round(new Date().getTime()/1000);
         var payload = {
             'iat': iat,
@@ -54,7 +52,6 @@ class SMASHDOCs {
         };
 
         var result;
-        var request = require('request');
         request.post(options, function (error, response, body) {
             if (response.statusCode == 200) {
                 result = body;
@@ -76,6 +73,11 @@ var user_data = {
     'company': 'The Foo Company',
     'userId': 'ajung'
 }
+
+var client_id = process.env.SMASHDOCS_CLIENT_ID;
+var client_key = process.env.SMASHDOCS_CLIENT_KEY;
+var partner_url = process.env.SMASHDOCS_PARTNER_URL;
+
 
 SD = new SMASHDOCs(partner_url, client_id, client_key, 'sample-grp');
 var result = SD.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
