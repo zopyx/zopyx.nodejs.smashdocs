@@ -12,6 +12,7 @@ class SMASHDOCs {
         this.client_key = client_key;
         this.group_id = group_id
         this.verbose = verbose;
+        require('request').debug = verbose;;
     }
 
     get_token() {
@@ -154,7 +155,30 @@ class SMASHDOCs {
         return result;
     }
 
+    document_info(document_id) {
+
+        var url = partner_url + `/partner/documents/${document_id}`;
+        var options = {
+          url: url,
+          headers: this.headers(),
+        };
+
+        var result;
+        request.get(options, function (error, response, body) {
+            if (response.statusCode == 200) {
+                result = body;
+            } else {
+                throw new Error(error);
+            }
+        });
+        while(result === undefined) {
+            require('deasync').runLoopOnce();
+        }
+        return JSON.parse(result);
+    }
+
     export_document(document_id, user_id='', format='docx', template_id=null) {
+
         var data = { userId: user_id};
 
         if (format == 'docx') {
@@ -167,18 +191,15 @@ class SMASHDOCs {
             var url = partner_url + `/partner/documents/${document_id}/export/html`;
         }
 
-
         var options = {
           url: url,
           json: data,
           headers: this.headers(),
         };
+        
+        var suffix = (['sdxml', 'html'].indexOf(format) != -1) ? 'zip' : format;
+        var fn_out = `${format}_out.${suffix}`
 
-        var suffix = format;
-        if (['sdxml', 'html'].indexOf(format) != -1) {
-            suffix = 'zip';
-        }
-        var fn_out = `${format}_out.${suffix}`;
         request.post(options, function (error, response, body) {
             if (response.statusCode == 200) {
                 result = body;
@@ -211,6 +232,7 @@ var partner_url = process.env.SMASHDOCS_PARTNER_URL;
 SD = new SMASHDOCs(partner_url, client_id, client_key, 'sample-grp');
 var result = SD.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
 var document_id = result['documentId'];
+console.log(SD.document_info(document_id));
 console.log(result['documentAccessLink']);
 console.log(result['documentId']);
 var templates = SD.list_templates();
