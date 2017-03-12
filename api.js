@@ -1,6 +1,7 @@
 var jwt = require('json-web-token');
 var uuidV4 = require('uuid/v4');
 var request = require('request');
+var fs = require('fs');
 
 
 class SMASHDOCs {
@@ -152,28 +153,21 @@ class SMASHDOCs {
           headers: this.headers(),
         };
 
-        var result;
+        var suffix = format;
+        if (['sdxml', 'html'].indexOf(format) != -1) {
+            suffix = 'zip';
+        }
+        var fn_out = `${format}_out.${suffix}`;
         request.post(options, function (error, response, body) {
             if (response.statusCode == 200) {
                 result = body;
             } else {
                 throw new Error(error);
             }
-        });
+        }).pipe(fs.createWriteStream(fn_out));
         while(result === undefined) {
             require('deasync').runLoopOnce();
         }
-
-        var suffix = format;
-        if (['sdxml', 'html'].indexOf(format) != -1) {
-            suffix = 'zip';
-        }
-
-        var fs = require('fs');
-        var fn_out = `${format}_out.${suffix}`;
-        var fp = fs.createWriteStream(fn_out);
-        fp.write(result);
-        fp.end();
         return fn_out;
     }
 }
