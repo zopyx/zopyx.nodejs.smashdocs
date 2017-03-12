@@ -30,3 +30,30 @@ headers = {
 }
 
 console.log(headers);
+
+
+user_data = {
+    'firstname': 'Andreas',
+    'lastname': 'Jung',
+    'email': 'foo@bar.org',
+    'company': 'The Foo Company',
+    'userId': 'ajung'
+}
+
+data = {
+    'user': user_data,
+    'title': 'My title',
+    'description': 'my description',
+    'groupId': 'nodejs',
+    'userRole': 'editor',
+    'status': 'draft',
+    'sectionHistory': true
+}
+
+url = partner_url + '/partner/documents/create';
+
+data_json = JSON.stringify(data);
+
+
+var http = require('http');
+http.post = require('http-post');
