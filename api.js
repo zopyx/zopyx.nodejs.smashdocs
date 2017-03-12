@@ -43,7 +43,6 @@ class SMASHDOCs {
         }
     }
 
-
     new_document(title='', description='', role='editor', status='draft') {
 
         var data = {
@@ -83,5 +82,5 @@ class SMASHDOCs {
 
 SD = new SMASHDOCs(partner_url, client_id, client_key);
 var result = SD.new_document();
-console.log(result);
 console.log(result['documentAccessLink']);
+console.log(result['documentId']);
