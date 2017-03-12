@@ -6,10 +6,11 @@ var partner_url = process.env.SMASHDOCS_PARTNER_URL;
 
 class SMASHDOCs {
 
-    constructor(partner_url, client_id, client_key, verbose=false) {
+    constructor(partner_url, client_id, client_key, group_id, verbose=false) {
         this.partner_url = partner_url;
         this.client_id = client_id;
         this.client_key = client_key;
+        this.group_id = group_id
         this.verbose = verbose;
     }
 
@@ -33,25 +34,15 @@ class SMASHDOCs {
         }
     }
 
-    user_data() {
-        return  {
-            'firstname': 'Andreas',
-            'lastname': 'Jung',
-            'email': 'foo@bar.org',
-            'company': 'The Foo Company',
-            'userId': 'ajung'
-        }
-    }
-
-    new_document(title='', description='', role='editor', status='draft') {
+    new_document(title='', description='', role='editor', status='draft', user_data=null) {
 
         var data = {
-            'user': this.user_data(),
-            'title': 'My title',
-            'description': 'my description',
-            'groupId': 'nodejs',
-            'userRole': 'editor',
-            'status': 'draft',
+            'user': user_data,
+            'title': title,
+            'description': description,
+            'groupId': this.group_id,
+            'userRole': role,
+            'status': status,
             'sectionHistory': true
         }
 
@@ -66,7 +57,6 @@ class SMASHDOCs {
         var request = require('request');
         request.post(options, function (error, response, body) {
             if (response.statusCode == 200) {
-                console.log(response.statusCode);
                 result = body;
             } else {
                 throw new Error(error);
@@ -79,8 +69,15 @@ class SMASHDOCs {
     }
 }
 
+var user_data = {
+    'firstname': 'Andreas',
+    'lastname': 'Jung',
+    'email': 'foo@bar.org',
+    'company': 'The Foo Company',
+    'userId': 'ajung'
+}
 
-SD = new SMASHDOCs(partner_url, client_id, client_key);
-var result = SD.new_document();
+SD = new SMASHDOCs(partner_url, client_id, client_key, 'sample-grp');
+var result = SD.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
 console.log(result['documentAccessLink']);
 console.log(result['documentId']);
