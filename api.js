@@ -113,7 +113,6 @@ class SMASHDOCs {
     delete_document(document_id) {
 
         var url = partner_url + `/partner/documents/${document_id}`;
-        console.log(url);
         var options = {
           url: url,
           headers: this.headers(),
