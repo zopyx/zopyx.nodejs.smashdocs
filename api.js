@@ -32,6 +32,27 @@ class SMASHDOCs {
             'authorization': 'Bearer ' + this.get_token()
         }
     }
+    list_templates() {
+
+        var url = partner_url + '/partner/templates/word';
+        var options = {
+          url: url,
+          headers: this.headers(),
+        };
+
+        var result;
+        request.get(options, function (error, response, body) {
+            if (response.statusCode == 200) {
+                result = body;
+            } else {
+                throw new Error(error);
+            }
+        });
+        while(result === undefined) {
+            require('deasync').runLoopOnce();
+        }
+        return JSON.parse(result);
+    }
 
     new_document(title='', description='', role='editor', status='draft', user_data=null) {
 
@@ -63,7 +84,6 @@ class SMASHDOCs {
         while(result === undefined) {
             require('deasync').runLoopOnce();
         }
-        console.log(result);
         return result;
     }
 
@@ -134,18 +154,19 @@ class SMASHDOCs {
         return result;
     }
 
-    export_document(document_id, user_id='', format='docx') {
+    export_document(document_id, user_id='', format='docx', template_id=null) {
+        var data = { userId: user_id};
 
         if (format == 'docx') {
             var url = partner_url + `/partner/documents/${document_id}/export/word`;
-
+            data['templateId'] = template_id;
+            data['settings'] = {};
         } else if (format == 'sdxml'){
             var url = partner_url + `/partner/documents/${document_id}/export/sdxml`;
         } else {
             var url = partner_url + `/partner/documents/${document_id}/export/html`;
         }
 
-        var data = { userId: user_id};
 
         var options = {
           url: url,
@@ -162,6 +183,8 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
+                console.log(error);
+                console.log(body);
                 throw new Error(error);
             }
         }).pipe(fs.createWriteStream(fn_out));
@@ -190,8 +213,11 @@ var result = SD.new_document('doc title', 'doc description', 'editor', 'draft', 
 var document_id = result['documentId'];
 console.log(result['documentAccessLink']);
 console.log(result['documentId']);
+var templates = SD.list_templates();
 console.log(SD.export_document(document_id, 'ajung', 'sdxml'));
 console.log(SD.export_document(document_id, 'ajung', 'html'));
+console.log(templates[0]);
+console.log(SD.export_document(document_id, 'ajung', 'docx', templates[0]['id']));
 SD.archive_document(document_id);
 SD.unarchive_document(document_id);
 SD.delete_document(document_id);
