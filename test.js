@@ -4,11 +4,6 @@ var client_id = process.env.SMASHDOCS_CLIENT_ID;
 var client_key = process.env.SMASHDOCS_CLIENT_KEY;
 var partner_url = process.env.SMASHDOCS_PARTNER_URL;
 
-console.log('Partner URL: ', partner_url);
-console.log('Client Id: ', client_id);
-console.log('Client Key: ', client_key);
-
-
 class SMASHDOCs {
 
     constructor(partner_url, client_id, client_key, verbose=false) {
