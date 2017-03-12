@@ -10,10 +10,9 @@ class SMASHDOCs {
         this.partner_url = partner_url;
         this.client_id = client_id;
         this.client_key = client_key;
-        this.group_id = group_id
+        this.group_id = group_id;
         this.verbose = verbose;
         require('request').debug = verbose;
-        ;
     }
 
     get_token() {
@@ -22,7 +21,7 @@ class SMASHDOCs {
             'iat': iat,
             'iss': uuidV4(),
             'jti': uuidV4(),
-        }
+        };
         var token = jwt.encode(client_key, payload);
         return token.value;
     }
@@ -58,6 +57,37 @@ class SMASHDOCs {
         return JSON.parse(result);
     }
 
+    duplicate_document(document_id, title = '', description = '', creator_id = null) {
+
+        var data = {
+            'title': title,
+            'description': description,
+            'creatorUserId': creator_id
+        };
+
+        var url = partner_url + `/partner/documents/${document_id}/duplicate`;
+        var options = {
+            url: url,
+            json: data,
+            headers: this.headers(),
+        };
+
+        var result;
+        request.post(options, function (error, response, body) {
+            if (response.statusCode == 200) {
+                result = body;
+            } else {
+                var msg = `HTTP call failed (${url}, ${body})`;
+                throw new Error(msg);
+            }
+        });
+        while (result === undefined) {
+            require('deasync').runLoopOnce();
+        }
+        return result;
+    }
+
+
     new_document(title = '', description = '', role = 'editor', status = 'draft', user_data = null) {
 
         var data = {
@@ -68,7 +98,7 @@ class SMASHDOCs {
             'userRole': role,
             'status': status,
             'sectionHistory': true
-        }
+        };
 
         var url = partner_url + '/partner/documents/create';
         var options = {
@@ -206,7 +236,7 @@ class SMASHDOCs {
         };
 
         var suffix = (['sdxml', 'html'].indexOf(format) != -1) ? 'zip' : format;
-        var fn_out = `${format}_out.${suffix}`
+        var fn_out = `${format}_out.${suffix}`;
 
         request.post(options, function (error, response, body) {
             if (response.statusCode == 200) {
@@ -221,6 +251,53 @@ class SMASHDOCs {
         }
         return fn_out;
     }
+
+    upload_document(filename, title = '', description = '', role = 'editor', user_data = null, status = 'draft') {
+
+        var headers = {
+            'x-client-id': client_id,
+            'authorization': 'Bearer ' + this.get_token()
+        };
+
+        var data = {
+            'user': user_data,
+            'title': title,
+            'description': description,
+            'groupId': this.group_id,
+            'userRole': role,
+            'status': status,
+            'sectionHistory': true
+        };
+
+        var url = partner_url + '/partner/imports/word/upload';
+        var options = {
+            url: url,
+            headers: headers,
+            multipart: [
+                {
+                    'content-type': 'application/json',
+                    body: JSON.stringify(data)
+                },
+                {body: fs.createReadStream(filename), 
+                 'content-type': 'application/octet-stream'}
+            ],
+        };
+
+        var result;
+        request.post(options, function (error, response, body) {
+            if (response.statusCode == 200) {
+                result = body;
+            } else {
+                var msg = `HTTP call failed (${url}, ${body})`;
+                throw new Error(msg);
+            }
+        });
+        while (result === undefined) {
+            require('deasync').runLoopOnce();
+        }
+        return result;
+
+    }
 }
 
 var user_data = {
@@ -229,19 +306,20 @@ var user_data = {
     'email': 'foo@bar.org',
     'company': 'The Foo Company',
     'userId': 'ajung'
-}
+};
 
 var client_id = process.env.SMASHDOCS_CLIENT_ID;
 var client_key = process.env.SMASHDOCS_CLIENT_KEY;
 var partner_url = process.env.SMASHDOCS_PARTNER_URL;
 
 
-SD = new SMASHDOCs(partner_url, client_id, client_key, 'sample-grp');
+SD = new SMASHDOCs(partner_url, client_id, client_key, 'sample-grp', 1);
+
+
 var result = SD.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
 var document_id = result['documentId'];
-console.log(SD.document_info(document_id));
-console.log(result['documentAccessLink']);
-console.log(result['documentId']);
+var doc_info = SD.document_info(document_id);
+console.log(SD.duplicate_document(document_id, 'new_title', 'new_description', 'ajung'));
 var templates = SD.list_templates();
 console.log(SD.export_document(document_id, 'ajung', 'sdxml'));
 console.log(SD.export_document(document_id, 'ajung', 'html'));
@@ -250,3 +328,6 @@ console.log(SD.export_document(document_id, 'ajung', 'docx', templates[0]['id'])
 SD.archive_document(document_id);
 SD.unarchive_document(document_id);
 SD.delete_document(document_id);
+
+var result = SD.upload_document('test.docx', 'title', 'description', 'editor', 'draft', user_data);
+console.log(result);
