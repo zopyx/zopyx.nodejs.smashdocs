@@ -65,6 +65,51 @@ class SMASHDOCs {
         return result;
     }
 
+    archive_document(document_id) {
+
+        var url = partner_url + `/partner/documents/${document_id}/archive`;
+        var options = {
+          url: url,
+          headers: this.headers(),
+        };
+
+        var result;
+        request.post(options, function (error, response, body) {
+            if (response.statusCode == 200) {
+                result = body;
+            } else {
+                throw new Error(error);
+            }
+        });
+        while(result === undefined) {
+            require('deasync').runLoopOnce();
+        }
+        return result;
+    }
+
+    unarchive_document(document_id) {
+
+        var url = partner_url + `/partner/documents/${document_id}/unarchive`;
+        var options = {
+          url: url,
+          headers: this.headers(),
+        };
+
+        var result;
+        request.post(options, function (error, response, body) {
+            if (response.statusCode == 200) {
+                result = body;
+            } else {
+                throw new Error(error);
+            }
+        });
+        while(result === undefined) {
+            require('deasync').runLoopOnce();
+        }
+        return result;
+    }
+
+
     delete_document(document_id) {
 
         var url = partner_url + `/partner/documents/${document_id}`;
@@ -107,5 +152,7 @@ var result = SD.new_document('doc title', 'doc description', 'editor', 'draft', 
 console.log(result['documentAccessLink']);
 console.log(result['documentId']);
 var document_id = result['documentId'];
+SD.archive_document(document_id);
+SD.unarchive_document(document_id);
 
 SD.delete_document(document_id);
