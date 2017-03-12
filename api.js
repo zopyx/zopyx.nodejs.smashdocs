@@ -62,6 +62,7 @@ class SMASHDOCs {
         while(result === undefined) {
             require('deasync').runLoopOnce();
         }
+        console.log(result);
         return result;
     }
 
@@ -131,6 +132,50 @@ class SMASHDOCs {
         }
         return result;
     }
+
+    export_document(document_id, user_id='', format='docx') {
+
+        if (format == 'docx') {
+            var url = partner_url + `/partner/documents/${document_id}/export/word`;
+
+        } else if (format == 'sdxml'){
+            var url = partner_url + `/partner/documents/${document_id}/export/sdxml`;
+        } else {
+            var url = partner_url + `/partner/documents/${document_id}/export/html`;
+        }
+
+        var data = { userId: user_id};
+
+        var options = {
+          url: url,
+          json: data,
+          headers: this.headers(),
+        };
+
+        var result;
+        request.post(options, function (error, response, body) {
+            if (response.statusCode == 200) {
+                result = body;
+            } else {
+                throw new Error(error);
+            }
+        });
+        while(result === undefined) {
+            require('deasync').runLoopOnce();
+        }
+
+        var suffix = format;
+        if (['sdxml', 'html'].indexOf(format) != -1) {
+            suffix = 'zip';
+        }
+
+        var fs = require('fs');
+        var fn_out = `${format}_out.${suffix}`;
+        var fp = fs.createWriteStream(fn_out);
+        fp.write(result);
+        fp.end();
+        return fn_out;
+    }
 }
 
 var user_data = {
@@ -148,10 +193,11 @@ var partner_url = process.env.SMASHDOCS_PARTNER_URL;
 
 SD = new SMASHDOCs(partner_url, client_id, client_key, 'sample-grp');
 var result = SD.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
+var document_id = result['documentId'];
 console.log(result['documentAccessLink']);
 console.log(result['documentId']);
-var document_id = result['documentId'];
+console.log(SD.export_document(document_id, 'ajung', 'sdxml'));
+console.log(SD.export_document(document_id, 'ajung', 'html'));
 SD.archive_document(document_id);
 SD.unarchive_document(document_id);
-
 SD.delete_document(document_id);
