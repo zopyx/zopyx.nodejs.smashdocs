@@ -44,6 +44,20 @@ describe('SmashdocsTests', function() {
             expect(function() {sd.unarchive_document(result['documentId'])}).to.throw(Error);
         });
 
+        it('review_document()', function() {
+            var result = sd.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
+            var document_id = result['documentId'];
+
+            var document_info = sd.document_info(document_id);
+            expect(document_info['status']).to.equal('draft');
+
+            sd.review_document(document_id);
+
+            var document_info2 = sd.document_info(document_id);
+            expect(document_info2['status']).to.equal('review');
+        });
+
+
     });
     
 });
