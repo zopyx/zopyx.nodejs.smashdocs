@@ -20,9 +20,28 @@ describe('SmashdocsTests', function() {
     };
 
     describe('push', function() {
-        it('check document id', function() {
+        it('new_document()', function() {
             var result = sd.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
             expect(result).to.have.any.keys('documentId', 'documentAccessLink');            
+        });
+
+        it('document_info()', function() {
+            var result = sd.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
+            var info = sd.document_info(result['documentId']);
+            expect(info).to.have.any.keys('title', 'description', 'status');            
+        });
+
+        it('delete_document()', function() {
+            var result = sd.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
+            sd.delete_document(result['documentId']);
+            expect(function() {sd.delete_document(result['documentId'])}).to.throw(Error);
+        });
+
+        it('archive_document()', function() {
+            var result = sd.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
+            sd.archive_document(result['documentId']);
+            sd.unarchive_document(result['documentId']);
+            expect(function() {sd.unarchive_document(result['documentId'])}).to.throw(Error);
         });
 
     });
