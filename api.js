@@ -22,13 +22,13 @@ class SMASHDOCs {
             'iss': uuidV4(),
             'jti': uuidV4(),
         };
-        var token = jwt.encode(client_key, payload);
+        var token = jwt.encode(this.client_key, payload);
         return token.value;
     }
 
     headers() {
         return {
-            'x-client-id': client_id,
+            'x-client-id': this.client_id,
             'content-type': 'application/json',
             'authorization': 'Bearer ' + this.get_token()
         }
@@ -301,7 +301,7 @@ class SMASHDOCs {
     upload_document(filename, title = '', description = '', role = 'editor', user_data = null, status = 'draft') {
 
         var headers = {
-            'x-client-id': client_id,
+            'x-client-id': this.client_id,
             'authorization': 'Bearer ' + this.get_token()
         };
 
@@ -346,6 +346,8 @@ class SMASHDOCs {
     }
 }
 
+/*
+
 var user_data = {
     'firstname': 'Hans',
     'lastname': 'Schlumpf',
@@ -365,14 +367,10 @@ SD = new SMASHDOCs(partner_url, client_id, client_key, group_id, debug);
 
 var result = SD.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
 var document_id = result['documentId'];
-/*
 SD.update_metadata(document_id, {a:2,b:3})
-*/
 
 var doc_info = SD.document_info(document_id);
-/*
 var doc_info = SD.review_document(document_id);
-*/
 var doc_info = SD.document_info(document_id);
 console.log(doc_info);
 console.log(SD.duplicate_document(document_id, 'new_title', 'new_description', 'schlumpf'));
@@ -385,8 +383,8 @@ SD.archive_document(document_id);
 SD.unarchive_document(document_id);
 SD.delete_document(document_id);
 
-/*
 var result = SD.upload_document('test.docx', 'title', 'description', 'editor', 'draft', user_data);
 console.log(result);
 */
 
+module.exports = SMASHDOCs;
