@@ -215,8 +215,9 @@ class SMASHDOCs {
         var result;
         request.post(options, function (error, response, body) {
             if (response.statusCode == 200) {
-                result = body;
+                result = 'dummy'; /* no return code at all */
             } else {
+                console.log(error);
                 var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
                 throw new Error(msg);
             }
@@ -224,7 +225,7 @@ class SMASHDOCs {
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-        return result;
+        return;
     }
 
     delete_document(document_id) {

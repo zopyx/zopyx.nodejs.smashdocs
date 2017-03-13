@@ -86,6 +86,14 @@ describe('SmashdocsTests', function() {
             done();
         });
 
+        it('update_metadata()', function() {
+            var document_id = new_doc();
+            sd.update_metadata(document_id, {title: 'bar'});
+            var di = sd.document_info(document_id);
+            chai.expect(di['title']).equal('bar');
+        });
+
+
     });
     
 });
