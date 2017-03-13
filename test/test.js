@@ -93,6 +93,9 @@ describe('SmashdocsTests', function() {
             chai.expect(di['title']).equal('bar');
         });
 
+        it('upload_docx()', function() {
+            sd.upload_document('test.docx', 'title', 'description', 'editor', user_data);
+        });
 
     });
     
