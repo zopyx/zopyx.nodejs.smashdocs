@@ -1,6 +1,6 @@
 var chai = require('chai');
-var SMASHDOCs = require('../api');
 chai.use(require('chai-string'));
+var SMASHDOCs = require('../api');
 
 describe('SmashdocsTests', function() {
 
@@ -19,7 +19,7 @@ describe('SmashdocsTests', function() {
         'userId': 'schlumpf'
     };
 
-    describe('push', function() {
+    describe('SMASHDOCs API tests', function() {
         it('new_document()', function() {
             var result = sd.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
             chai.expect(result).to.have.any.keys('documentId', 'documentAccessLink');            
