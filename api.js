@@ -7,12 +7,24 @@ var fs = require('fs');
 class SMASHDOCs {
 
     constructor(partner_url, client_id, client_key, group_id, verbose = false) {
+
+        this.check_parameter(partner_url);
+        this.check_parameter(client_id);
+        this.check_parameter(client_key);
+        this.check_parameter(group_id);
+
         this.partner_url = partner_url;
         this.client_id = client_id;
         this.client_key = client_key;
         this.group_id = group_id;
         this.verbose = verbose;
         require('request').debug = verbose;
+    }
+
+    check_parameter(s) {
+        if (s.length == 0 || s===undefined) {
+            throw new Error('Invalid parameter');
+        }
     }
 
     get_token() {
