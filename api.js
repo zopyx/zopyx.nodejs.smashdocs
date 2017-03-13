@@ -339,6 +339,7 @@ class SMASHDOCs {
                     body: JSON.stringify(data)
                 },
                 {body: fs.createReadStream(filename), 
+                    filename: 'test.docx',
                  'content-type': 'application/octet-stream'}
             ],
         };
