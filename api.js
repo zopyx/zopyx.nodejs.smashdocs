@@ -296,6 +296,7 @@ class SMASHDOCs {
         var suffix = (['sdxml', 'html'].indexOf(format) != -1) ? 'zip' : format;
         var fn_out = `${format}_out.${suffix}`;
 
+        var result;
         request.post(options, function (error, response, body) {
             if (response.statusCode == 200) {
                 result = body;
@@ -357,46 +358,5 @@ class SMASHDOCs {
 
     }
 }
-
-/*
-
-var user_data = {
-    'firstname': 'Hans',
-    'lastname': 'Schlumpf',
-    'email': 'foo@bar.org',
-    'company': 'The Foo Company',
-    'userId': 'schlumpf'
-};
-
-var client_id = process.env.SMASHDOCS_CLIENT_ID;
-var client_key = process.env.SMASHDOCS_CLIENT_KEY;
-var partner_url = process.env.SMASHDOCS_PARTNER_URL;
-var debug =  process.env.SMASHDOCS_DEBUG;
-var group_id = 'sample-grp';
-
-
-SD = new SMASHDOCs(partner_url, client_id, client_key, group_id, debug);
-
-var result = SD.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
-var document_id = result['documentId'];
-SD.update_metadata(document_id, {a:2,b:3})
-
-var doc_info = SD.document_info(document_id);
-var doc_info = SD.review_document(document_id);
-var doc_info = SD.document_info(document_id);
-console.log(doc_info);
-console.log(SD.duplicate_document(document_id, 'new_title', 'new_description', 'schlumpf'));
-var templates = SD.list_templates();
-console.log(SD.export_document(document_id, 'schlumpf', 'sdxml'));
-console.log(SD.export_document(document_id, 'schlumpf', 'html'));
-console.log(templates[0]);
-console.log(SD.export_document(document_id, 'schlumpf', 'docx', templates[0]['id']));
-SD.archive_document(document_id);
-SD.unarchive_document(document_id);
-SD.delete_document(document_id);
-
-var result = SD.upload_document('test.docx', 'title', 'description', 'editor', 'draft', user_data);
-console.log(result);
-*/
 
 module.exports = SMASHDOCs;
