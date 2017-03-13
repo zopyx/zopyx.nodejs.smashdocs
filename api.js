@@ -229,6 +229,7 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
+                console.log(body);
                 var msg = `HTTP call failed (${url}, ${body})`;
                 throw new Error(msg);
             }
