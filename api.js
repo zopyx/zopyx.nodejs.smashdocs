@@ -36,7 +36,7 @@ class SMASHDOCs {
 
     list_templates() {
 
-        var url = partner_url + '/partner/templates/word';
+        var url = `${this.partner_url}/partner/templates/word`;
         var options = {
             url: url,
             headers: this.headers(),
@@ -47,7 +47,7 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                var msg = `HTTP call failed (${url}, ${body})`;
+                var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
                 throw new Error(msg);
             }
         });
@@ -65,7 +65,7 @@ class SMASHDOCs {
             'creatorUserId': creator_id
         };
 
-        var url = partner_url + `/partner/documents/${document_id}/duplicate`;
+        var url = `${this.partner_url}/partner/documents/${document_id}/duplicate`;
         var options = {
             url: url,
             json: data,
@@ -77,7 +77,7 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                var msg = `HTTP call failed (${url}, ${body})`;
+                var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
                 throw new Error(msg);
             }
         });
@@ -100,7 +100,7 @@ class SMASHDOCs {
             'sectionHistory': true
         };
 
-        var url = partner_url + '/partner/documents/create';
+        var url = `${this.partner_url}/partner/documents/create`;
         var options = {
             url: url,
             json: data,
@@ -112,7 +112,7 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                var msg = `HTTP call failed (${url}, ${body})`;
+                var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
                 throw new Error(msg);
             }
         });
@@ -124,7 +124,7 @@ class SMASHDOCs {
 
     review_document(document_id) {
 
-        var url = partner_url + `/partner/documents/${document_id}/review`;
+        var url = `${this.partner_url}/partner/documents/${document_id}/review`;
         var options = {
             url: url,
             headers: this.headers(),
@@ -147,7 +147,7 @@ class SMASHDOCs {
 
     archive_document(document_id) {
 
-        var url = partner_url + `/partner/documents/${document_id}/archive`;
+        var url = `${this.partner_url}/partner/documents/${document_id}/archive`;
         var options = {
             url: url,
             headers: this.headers(),
@@ -158,7 +158,7 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                var msg = `HTTP call failed (${url}, ${body})`;
+                var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
                 throw new Error(msg);
             }
         });
@@ -170,7 +170,7 @@ class SMASHDOCs {
 
     unarchive_document(document_id) {
 
-        var url = partner_url + `/partner/documents/${document_id}/unarchive`;
+        var url = `${this.partner_url}/partner/documents/${document_id}/unarchive`;
         var options = {
             url: url,
             headers: this.headers(),
@@ -181,7 +181,7 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                var msg = `HTTP call failed (${url}, ${body})`;
+                var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
                 throw new Error(msg);
             }
         });
@@ -193,7 +193,7 @@ class SMASHDOCs {
 
     update_metadata(document_id, data) {
 
-        var url = partner_url + `/partner/documents/${document_id}/metadata`;
+        var url = `${this.partner_url}/partner/documents/${document_id}/metadata`;
         var options = {
             url: url,
             json: data,
@@ -205,8 +205,7 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                console.log(error);
-                var msg = `HTTP call failed (${url}, ${body})`;
+                var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
                 throw new Error(msg);
             }
         });
@@ -218,7 +217,7 @@ class SMASHDOCs {
 
     delete_document(document_id) {
 
-        var url = partner_url + `/partner/documents/${document_id}`;
+        var url = `${this.partner_url}/partner/documents/${document_id}`;
         var options = {
             url: url,
             headers: this.headers(),
@@ -229,8 +228,7 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                console.log(body);
-                var msg = `HTTP call failed (${url}, ${body})`;
+                var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
                 throw new Error(msg);
             }
         });
@@ -242,7 +240,7 @@ class SMASHDOCs {
 
     document_info(document_id) {
 
-        var url = partner_url + `/partner/documents/${document_id}`;
+        var url = `${this.partner_url}/partner/documents/${document_id}`;
         var options = {
             url: url,
             headers: this.headers(),
@@ -253,7 +251,7 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                var msg = `HTTP call failed (${url}, ${body})`;
+                var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
                 throw new Error(msg);
             }
         });
@@ -268,13 +266,13 @@ class SMASHDOCs {
         var data = {userId: user_id};
 
         if (format == 'docx') {
-            var url = partner_url + `/partner/documents/${document_id}/export/word`;
+            var url = `${this.partner_url}/partner/documents/${document_id}/export/word`;
             data['templateId'] = template_id;
             data['settings'] = {};
         } else if (format == 'sdxml') {
-            var url = partner_url + `/partner/documents/${document_id}/export/sdxml`;
+            var url = `${this.partner_url}/partner/documents/${document_id}/export/sdxml`;
         } else {
-            var url = partner_url + `/partner/documents/${document_id}/export/html`;
+            var url = `${this.partner_url}/partner/documents/${document_id}/export/html`;
         }
 
         var options = {
@@ -290,7 +288,7 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                var msg = `HTTP call failed (${url}, ${body})`;
+                var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
                 throw new Error(msg);
             }
         }).pipe(fs.createWriteStream(fn_out));
@@ -317,7 +315,7 @@ class SMASHDOCs {
             'sectionHistory': true
         };
 
-        var url = partner_url + '/partner/imports/word/upload';
+        var url = `${this.partner_url}/partner/imports/word/upload`;
         var options = {
             url: url,
             headers: headers,
@@ -336,7 +334,7 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = body;
             } else {
-                var msg = `HTTP call failed (${url}, ${body})`;
+                var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
                 throw new Error(msg);
             }
         });
@@ -367,11 +365,14 @@ SD = new SMASHDOCs(partner_url, client_id, client_key, group_id, debug);
 
 var result = SD.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
 var document_id = result['documentId'];
-SD.update_metadata(document_id, {a:2,b:3})
-
 /*
+SD.update_metadata(document_id, {a:2,b:3})
+*/
+
 var doc_info = SD.document_info(document_id);
+/*
 var doc_info = SD.review_document(document_id);
+*/
 var doc_info = SD.document_info(document_id);
 console.log(doc_info);
 console.log(SD.duplicate_document(document_id, 'new_title', 'new_description', 'schlumpf'));
@@ -382,10 +383,10 @@ console.log(templates[0]);
 console.log(SD.export_document(document_id, 'schlumpf', 'docx', templates[0]['id']));
 SD.archive_document(document_id);
 SD.unarchive_document(document_id);
-*/
+SD.delete_document(document_id);
+
 /*
 var result = SD.upload_document('test.docx', 'title', 'description', 'editor', 'draft', user_data);
 console.log(result);
-
-SD.delete_document(document_id);
 */
+
