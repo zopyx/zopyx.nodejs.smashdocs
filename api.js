@@ -355,7 +355,6 @@ class SMASHDOCs {
             require('deasync').runLoopOnce();
         }
         return result;
-
     }
 }
 
