@@ -7,7 +7,6 @@ var fs = require('fs');
 class SMASHDOCs {
 
     constructor(partner_url, client_id, client_key, group_id, verbose = false) {
-
         this.check_parameter(partner_url);
         this.check_parameter(client_id);
         this.check_parameter(client_key);
@@ -225,7 +224,7 @@ class SMASHDOCs {
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-        return;
+
     }
 
     delete_document(document_id) {
