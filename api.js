@@ -273,6 +273,34 @@ class SMASHDOCs {
         return JSON.parse(result);
     }
 
+    get_documents(group_id='', user_id='') {
+
+        var data = {};
+        if (group_id) data['groupId'] = group_id;
+        if (user_id) data['userId'] = user_id;
+
+        var url = `${this.partner_url}/partner/documents/list`;
+        var options = {
+            url: url,
+            json: data,
+            headers: this.headers(),
+        };
+
+        var result;
+        request.get(options, function (error, response, body) {
+            if (response.statusCode == 200) {
+                result = body;
+            } else {
+                var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
+                throw new Error(msg);
+            }
+        });
+        while (result === undefined) {
+            require('deasync').runLoopOnce();
+        }
+        return JSON.parse(result);
+    }
+
     export_document(document_id, user_id = '', format = 'docx', template_id = null) {
 
         var data = {userId: user_id};
