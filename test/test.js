@@ -2,6 +2,8 @@ var chai = require('chai');
 chai.use(require('chai-string'));
 var SMASHDOCs = require('../api');
 
+var TIMEOUT = 10000;
+
 describe('SmashdocsTests', function() {
 
     var client_id = process.env.SMASHDOCS_CLIENT_ID;
@@ -26,23 +28,27 @@ describe('SmashdocsTests', function() {
 
     describe('SMASHDOCs API tests', function() {
         it('new_document()', function() {
+            this.timeout(TIMEOUT);
             var result = sd.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
             chai.expect(result).to.have.any.keys('documentId', 'documentAccessLink');            
         });
 
         it('document_info()', function() {
+            this.timeout(TIMEOUT);
             var document_id = new_doc();
             var info = sd.document_info(document_id);
             chai.expect(info).to.have.any.keys('title', 'description', 'status');            
         });
 
         it('delete_document()', function() {
+            this.timeout(TIMEOUT);
             var document_id = new_doc();
             sd.delete_document(document_id);
             chai.expect(function() {sd.delete_document(document_id)}).to.throw(Error);
         });
 
         it('archive_document()', function() {
+            this.timeout(TIMEOUT);
             var document_id = new_doc();
             sd.archive_document(document_id);
             sd.unarchive_document(document_id);
@@ -50,6 +56,7 @@ describe('SmashdocsTests', function() {
         });
 
         it('review_document()', function() {
+            this.timeout(TIMEOUT);
             var document_id = new_doc();
 
             var document_info = sd.document_info(document_id);
@@ -62,7 +69,7 @@ describe('SmashdocsTests', function() {
         });
 
         it('export_document_sdxml()', function() {
-            this.timeout(10000);
+            this.timeout(TIMEOUT);
             var document_id = new_doc();
             var templates = sd.list_templates();
             var fn = sd.export_document(document_id, user_id='ajung', format='sdxml', template_id=templates[0]['id']);
@@ -70,7 +77,7 @@ describe('SmashdocsTests', function() {
         });
 
         it('export_document_html()', function() {
-            this.timeout(10000);
+            this.timeout(TIMEOUT);
             var document_id = new_doc();
             var templates = sd.list_templates();
             var fn = sd.export_document(document_id, user_id='ajung', format='html', template_id=templates[0]['id']);
@@ -78,7 +85,7 @@ describe('SmashdocsTests', function() {
         });
 
         it('export_document_docx()', function(done) {
-            this.timeout(10000);
+            this.timeout(TIMEOUT);
             var document_id = new_doc();
             var templates = sd.list_templates();
             var fn = sd.export_document(document_id, user_id='ajung', format='docx', template_id=templates[0]['id']);
@@ -87,6 +94,7 @@ describe('SmashdocsTests', function() {
         });
 
         it('update_metadata()', function() {
+            this.timeout(TIMEOUT);
             var document_id = new_doc();
             sd.update_metadata(document_id, {title: 'bar'});
             var di = sd.document_info(document_id);
