@@ -100,6 +100,15 @@ describe('SmashdocsTests', function() {
             var di = sd.document_info(document_id);
             chai.expect(di['title']).equal('bar');
         });
+
+        it('update_metadata()', function() {
+            this.timeout(TIMEOUT);
+            var document_id = new_doc();
+            var result = sd.get_documents('', 'schlumpf');
+            var result = result.filter(function(item) {return item['id'] == document_id});
+            chai.expect(result.length).equal(1);
+            
+        });
 /*
         it('upload_docx()', function() {
             sd.upload_document('test.docx', 'title', 'description', 'editor', user_data);

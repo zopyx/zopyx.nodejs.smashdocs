@@ -10,7 +10,8 @@
     "uuid": "^3.0.1",
     "chai": "*",
     "mocha": "*",
-    "chai-string": "*"
+    "chai-string": "*",
+    "querystring": "*"
   },
   "devDependencies": {},
   "scripts": {

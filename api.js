@@ -2,7 +2,7 @@ var jwt = require('json-web-token');
 var uuidV4 = require('uuid/v4');
 var request = require('request');
 var fs = require('fs');
-
+var qs = require('querystring');
 
 class SMASHDOCs {
 
@@ -216,7 +216,6 @@ class SMASHDOCs {
             if (response.statusCode == 200) {
                 result = 'dummy'; /* no return code at all */
             } else {
-                console.log(error);
                 var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
                 throw new Error(msg);
             }
@@ -282,7 +281,7 @@ class SMASHDOCs {
         var url = `${this.partner_url}/partner/documents/list`;
         var options = {
             url: url,
-            json: data,
+            qs: data,
             headers: this.headers(),
         };
 
