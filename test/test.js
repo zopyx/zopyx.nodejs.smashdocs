@@ -101,7 +101,7 @@ describe('SmashdocsTests', function() {
             chai.expect(di['title']).equal('bar');
         });
 
-        it('update_metadata()', function() {
+        it('get_metadata()', function() {
             this.timeout(TIMEOUT);
             var document_id = new_doc();
             var result = sd.get_documents('', 'schlumpf');
