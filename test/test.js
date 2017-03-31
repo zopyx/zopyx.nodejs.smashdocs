@@ -101,7 +101,7 @@ describe('SmashdocsTests', function() {
             chai.expect(di['title']).equal('bar');
         });
 
-        it('duplicate_documents()', function() {
+        it('duplicate_document()', function() {
             this.timeout(TIMEOUT);
             var document_id = new_doc();
             var result = sd.duplicate_document(document_id);
