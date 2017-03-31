@@ -1,3 +1,5 @@
+"use strict";
+
 var jwt = require('json-web-token');
 var uuidV4 = require('uuid/v4');
 var request = require('request');
@@ -6,7 +8,7 @@ var qs = require('querystring');
 
 class SMASHDOCs {
 
-    constructor(partner_url, client_id, client_key, group_id, verbose = false) {
+    constructor(partner_url, client_id, client_key, group_id, verbose=false) {
         this.check_parameter(partner_url);
         this.check_parameter(client_id);
         this.check_parameter(client_key);
