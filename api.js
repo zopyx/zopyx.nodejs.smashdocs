@@ -302,14 +302,14 @@ class SMASHDOCs {
         return JSON.parse(result);
     }
 
-    export_document(document_id, user_id = '', format = 'docx', template_id = null) {
+    export_document(document_id, user_id = '', format = 'docx', template_id = null, settings={}) {
 
         var data = {userId: user_id};
 
         if (format == 'docx') {
             var url = `${this.partner_url}/partner/documents/${document_id}/export/word`;
             data['templateId'] = template_id;
-            data['settings'] = {};
+            data['settings'] = settings;
         } else if (format == 'sdxml') {
             var url = `${this.partner_url}/partner/documents/${document_id}/export/sdxml`;
         } else {
