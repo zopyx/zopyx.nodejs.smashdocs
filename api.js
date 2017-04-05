@@ -361,15 +361,15 @@ class SMASHDOCs {
         var options = {
             url: url,
             headers: headers,
-            multipart: [
-                {
+            multipart: {
+                data: {
                     'content-type': 'application/json',
                     body: JSON.stringify(data)
                 },
-                {body: fs.createReadStream(filename), 
+                file: {body: fs.createReadStream(filename), 
                     filename: 'test.docx',
                  'content-type': 'application/octet-stream'}
-            ],
+            },
         };
 
         var result;
