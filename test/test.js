@@ -21,9 +21,14 @@ describe('SmashdocsTests', function() {
         'userId': 'schlumpf'
     };
 
-    function new_doc() {
-        var result = sd.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
-        return result['documentId'];
+    function new_doc(empty=true) {
+        if (empty) {
+            var result = sd.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
+            return result['documentId'];
+        } else {
+            var result = sd.upload_document('test.docx', 'doc title', 'doc description', 'editor', 'draft', user_data);
+            return result['documentId'];
+        }
     }
 
     describe('SMASHDOCs API tests', function() {
@@ -57,7 +62,7 @@ describe('SmashdocsTests', function() {
 
         it('review_document()', function() {
             this.timeout(TIMEOUT);
-            var document_id = new_doc();
+            var document_id = new_doc(false);
 
             var document_info = sd.document_info(document_id);
             chai.expect(document_info['status']).to.equal('draft');
@@ -103,7 +108,7 @@ describe('SmashdocsTests', function() {
 
         it('duplicate_document()', function() {
             this.timeout(TIMEOUT);
-            var document_id = new_doc();
+            var document_id = new_doc(false);
             var result = sd.duplicate_document(document_id);
         });
 
