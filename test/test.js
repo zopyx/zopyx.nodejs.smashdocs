@@ -109,7 +109,7 @@ describe('SmashdocsTests', function() {
         it('duplicate_document()', function() {
             this.timeout(TIMEOUT);
             var document_id = new_doc(false);
-            var result = sd.duplicate_document(document_id);
+            var result = sd.duplicate_document(document_id, title="new title", description="new description", creator_id="ajung");
         });
 
         it('get_documents()', function() {
