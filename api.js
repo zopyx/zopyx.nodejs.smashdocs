@@ -340,7 +340,7 @@ class SMASHDOCs {
         return fn_out;
     }
 
-    upload_document(filename, title = '', description = '', role = 'editor', user_data = null, status = 'draft') {
+    upload_document(filename, title = '', description = '', role = 'editor', status = 'draft', user_data = null) {
 
         var headers = {
             'x-client-id': this.client_id,
@@ -361,15 +361,11 @@ class SMASHDOCs {
         var options = {
             url: url,
             headers: headers,
-            multipart: {
-                data: {
-                    'content-type': 'application/json',
-                    body: JSON.stringify(data)
-                },
-                file: {body: fs.createReadStream(filename), 
-                    filename: 'test.docx',
-                 'content-type': 'application/octet-stream'}
-            },
+            formData: {
+                'content-type': 'application/json',
+                data: JSON.stringify(data),
+                file: fs.createReadStream(filename)
+            }
         };
 
         var result;
@@ -384,7 +380,7 @@ class SMASHDOCs {
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-        return result;
+        return JSON.parse(result);
     }
 }
 
