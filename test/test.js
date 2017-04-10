@@ -1,8 +1,11 @@
 var chai = require('chai');
 chai.use(require('chai-string'));
 var SMASHDOCs = require('../api');
+var joinPath = require('path.join');
 
 var TIMEOUT = 10000;
+var TEST_USER_ID = 'schlumpf';
+
 
 describe('SmashdocsTests', function() {
 
@@ -18,7 +21,7 @@ describe('SmashdocsTests', function() {
         'lastname': 'Schlumpf',
         'email': 'foo@bar.org',
         'company': 'The Foo Company',
-        'userId': 'schlumpf'
+        'userId': TEST_USER_ID
     };
 
     function new_doc(empty=true) {
@@ -26,7 +29,8 @@ describe('SmashdocsTests', function() {
             var result = sd.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
             return result['documentId'];
         } else {
-            var result = sd.upload_document('test.docx', 'doc title', 'doc description', 'editor', 'draft', user_data);
+            var fn = joinPath(__dirname, 'test.docx');
+            var result = sd.upload_document(fn, 'doc title', 'doc description', 'editor', 'draft', user_data);
             return result['documentId'];
         }
     }
@@ -36,6 +40,18 @@ describe('SmashdocsTests', function() {
             this.timeout(TIMEOUT);
             var result = sd.new_document('doc title', 'doc description', 'editor', 'draft', user_data);
             chai.expect(result).to.have.any.keys('documentId', 'documentAccessLink');            
+        });
+
+        it('upload_docx()', function() {
+            this.timeout(TIMEOUT);
+            var fn = joinPath(__dirname, 'test.docx');
+            var result = sd.upload_document(fn, 'doc title', 'doc description', 'editor', 'draft', user_data);
+        });
+
+        it('upload_sdxml()', function() {
+            this.timeout(TIMEOUT);
+            var fn = joinPath(__dirname, 'test_sdxml_large.zip');
+            var result = sd.upload_document(fn, 'doc title', 'doc description', 'editor', 'draft', user_data);
         });
 
         it('document_info()', function() {
@@ -77,7 +93,7 @@ describe('SmashdocsTests', function() {
             this.timeout(TIMEOUT);
             var document_id = new_doc();
             var templates = sd.list_templates();
-            var fn = sd.export_document(document_id, user_id='ajung', format='sdxml', template_id=templates[0]['id']);
+            var fn = sd.export_document(document_id, user_id=TEST_USER_ID, format='sdxml', template_id=templates[0]['id']);
             chai.expect(fn).to.endsWith('.zip');
         });
 
@@ -85,7 +101,7 @@ describe('SmashdocsTests', function() {
             this.timeout(TIMEOUT);
             var document_id = new_doc();
             var templates = sd.list_templates();
-            var fn = sd.export_document(document_id, user_id='ajung', format='html', template_id=templates[0]['id']);
+            var fn = sd.export_document(document_id, user_id=TEST_USER_ID, format='html', template_id=templates[0]['id']);
             chai.expect(fn).to.endsWith('.zip');
         });
 
@@ -93,7 +109,7 @@ describe('SmashdocsTests', function() {
             this.timeout(TIMEOUT);
             var document_id = new_doc();
             var templates = sd.list_templates();
-            var fn = sd.export_document(document_id, user_id='ajung', format='docx', template_id=templates[0]['id']);
+            var fn = sd.export_document(document_id, user_id=TEST_USER_ID, format='docx', template_id=templates[0]['id']);
             chai.expect(fn).to.endsWith('.docx');
             done();
         });
@@ -109,7 +125,7 @@ describe('SmashdocsTests', function() {
         it('duplicate_document()', function() {
             this.timeout(TIMEOUT);
             var document_id = new_doc(false);
-            var result = sd.duplicate_document(document_id, title="new title", description="new description", creator_id="ajung");
+            var result = sd.duplicate_document(document_id, title="new title", description="new description", creator_id=TEST_USER_ID);
         });
 
         it('get_documents()', function() {
@@ -120,11 +136,6 @@ describe('SmashdocsTests', function() {
             chai.expect(result.length).equal(1);
             
         });
-/*
-        it('upload_docx()', function() {
-            sd.upload_document('test.docx', 'title', 'description', 'editor', user_data);
-        });
-*/
     });
     
 });

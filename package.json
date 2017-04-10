@@ -11,6 +11,7 @@
     "chai": "*",
     "mocha": "*",
     "chai-string": "*",
+    "path.join": "*",
     "querystring": "*"
   },
   "devDependencies": {},

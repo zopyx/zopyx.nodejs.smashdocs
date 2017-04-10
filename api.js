@@ -357,7 +357,14 @@ class SMASHDOCs {
             'sectionHistory': true
         };
 
-        var url = `${this.partner_url}/partner/imports/word/upload`;
+        if (filename.toLowerCase().endsWith('docx')) {
+            var url = `${this.partner_url}/partner/imports/word/upload`;
+        } else if (filename.toLowerCase().endsWith('.zip'))  {
+            var url = `${this.partner_url}/partner/imports/sdxml/upload`;
+        } else {
+            throw new Error(`Unknown extension in ${filename}`);
+        }
+
         var options = {
             url: url,
             headers: headers,
