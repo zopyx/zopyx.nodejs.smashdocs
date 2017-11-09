@@ -313,6 +313,7 @@ class SMASHDOCs {
         } else if (format == 'sdxml') {
             var url = `${this.partner_url}/partner/documents/${document_id}/export/sdxml`;
         } else {
+            data['mode'] = 'final';
             var url = `${this.partner_url}/partner/documents/${document_id}/export/html`;
         }
 
