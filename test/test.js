@@ -3,7 +3,7 @@ chai.use(require('chai-string'));
 var SMASHDOCs = require('../api');
 var joinPath = require('path.join');
 
-var TIMEOUT = 10000;
+var TIMEOUT = 20000;
 var TEST_USER_ID = 'schlumpf';
 
 
