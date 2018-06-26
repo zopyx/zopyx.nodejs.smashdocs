@@ -61,13 +61,16 @@ class SMASHDOCs {
                 result = body;
             } else {
                 var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
-                throw new Error(msg);
+                result = new Error(msg);
             }
         });
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-        return JSON.parse(result);
+        if(result instanceof Error)
+            throw result;
+        else
+            return JSON.parse(result);
     }
 
     duplicate_document(document_id, title = '', description = '', creator_id = null) {
@@ -91,13 +94,16 @@ class SMASHDOCs {
                 result = body;
             } else {
                 var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
-                throw new Error(msg);
+                result = new Error(msg);
             }
         });
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-        return result;
+        if(result instanceof Error)
+            throw result;
+        else
+            return result;
     }
 
 
@@ -126,13 +132,16 @@ class SMASHDOCs {
                 result = body;
             } else {
                 var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
-                throw new Error(msg);
+                result = new Error(msg);
             }
         });
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-        return result;
+        if(result instanceof Error)
+            throw result;
+        else
+            return result;
     }
 
     review_document(document_id) {
@@ -149,13 +158,16 @@ class SMASHDOCs {
                 result = body;
             } else {
                 var msg = `HTTP call failed (${url}, ${body})`;
-                throw new Error(msg);
+                result = new Error(msg);
             }
         });
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-        return result;
+        if(result instanceof Error)
+            throw result;
+        else
+            return result;
     }
 
     archive_document(document_id) {
@@ -172,13 +184,16 @@ class SMASHDOCs {
                 result = body;
             } else {
                 var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
-                throw new Error(msg);
+                result = new Error(msg);
             }
         });
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-        return result;
+        if(result instanceof Error)
+            throw result;
+        else
+            return result;
     }
 
     unarchive_document(document_id) {
@@ -195,13 +210,16 @@ class SMASHDOCs {
                 result = body;
             } else {
                 var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
-                throw new Error(msg);
+                result = new Error(msg);
             }
         });
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-        return result;
+        if(result instanceof Error)
+            throw result;
+        else
+            return result;
     }
 
     update_metadata(document_id, data) {
@@ -219,13 +237,14 @@ class SMASHDOCs {
                 result = 'dummy'; /* no return code at all */
             } else {
                 var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
-                throw new Error(msg);
+                result = new Error(msg);
             }
         });
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-
+        if(result instanceof Error)
+            throw result;
     }
 
     delete_document(document_id) {
@@ -242,13 +261,17 @@ class SMASHDOCs {
                 result = body;
             } else {
                 var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
-                throw new Error(msg);
+                //throw new Error(msg);
+                result = new Error(msg);
             }
         });
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-        return result;
+        if(result instanceof Error)
+            throw result;
+        else    
+            return result;
     }
 
     document_info(document_id) {
@@ -265,13 +288,16 @@ class SMASHDOCs {
                 result = body;
             } else {
                 var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
-                throw new Error(msg);
+                result = new Error(msg);
             }
         });
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-        return JSON.parse(result);
+        if(result instanceof Error)
+            throw result;
+        else
+            return JSON.parse(result);
     }
 
     get_documents(group_id='', user_id='') {
@@ -293,13 +319,16 @@ class SMASHDOCs {
                 result = body;
             } else {
                 var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
-                throw new Error(msg);
+                result = new Error(msg);
             }
         });
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-        return JSON.parse(result);
+        if(result instanceof Error)
+            throw result;
+        else
+            return JSON.parse(result);
     }
 
     export_document(document_id, user_id = '', format = 'docx', template_id = null, settings={}) {
@@ -332,13 +361,16 @@ class SMASHDOCs {
                 result = body;
             } else {
                 var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
-                throw new Error(msg);
+                result = new Error(msg);
             }
         }).pipe(fs.createWriteStream(fn_out));
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-        return fn_out;
+        if(result instanceof Error)
+            throw result;
+        else
+            return fn_out;
     }
 
     upload_document(filename, title = '', description = '', role = 'editor', status = 'draft', user_data = null) {
@@ -382,13 +414,16 @@ class SMASHDOCs {
                 result = body;
             } else {
                 var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
-                throw new Error(msg);
+                result = new Error(msg);
             }
         });
         while (result === undefined) {
             require('deasync').runLoopOnce();
         }
-        return JSON.parse(result);
+        if(result instanceof Error)
+            throw result;
+        else
+            return JSON.parse(result);
     }
 }
 
