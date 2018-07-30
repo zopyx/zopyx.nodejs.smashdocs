@@ -136,6 +136,16 @@ describe('SmashdocsTests', function() {
             chai.expect(result.length).equal(1);
             
         });
+
+        it('unseen_count()', function() {
+            this.timeout(TIMEOUT);
+            var result = sd.unseen_count('schlumpf');
+        });
+
+        it('list_unseen_changes()', function() {
+            this.timeout(TIMEOUT);
+            var result = sd.list_unseen_changes('schlumpf');
+        });
     });
     
 });
