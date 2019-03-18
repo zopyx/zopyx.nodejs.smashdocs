@@ -425,6 +425,65 @@ class SMASHDOCs {
         else
             return JSON.parse(result);
     }
+
+    unseen_count(user_id='') {
+
+        var data = {userId: user_id};
+
+        var url = `${this.partner_url}/partner/documents/unseen/count`;
+        var options = {
+            url: url,
+            qs: data,
+            headers: this.headers(),
+        };
+
+        var result;
+        request.get(options, function (error, response, body) {
+            if (response.statusCode == 200) {
+                result = body;
+            } else {
+                var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
+                result = new Error(msg);
+            }
+        });
+        while (result === undefined) {
+            require('deasync').runLoopOnce();
+        }
+        if(result instanceof Error)
+            throw result;
+        else
+            return JSON.parse(result);
+    }
+
+    list_unseen_changes(user_id='') {
+
+        var data = {userId: user_id};
+
+        var url = `${this.partner_url}/partner/documents/unseen/list`;
+        var options = {
+            url: url,
+            qs: data,
+            headers: this.headers(),
+        };
+
+        var result;
+        request.get(options, function (error, response, body) {
+            if (response.statusCode == 200) {
+                result = body;
+            } else {
+                var msg = `HTTP call failed\nURL: ${url}\nHTTP code: ${response.statusCode}\nError: ${error}\nBody: ${body})`;
+                result = new Error(msg);
+            }
+        });
+        while (result === undefined) {
+            require('deasync').runLoopOnce();
+        }
+        if(result instanceof Error)
+            throw result;
+        else
+            return JSON.parse(result);
+    }
+
 }
 
 module.exports = SMASHDOCs;
