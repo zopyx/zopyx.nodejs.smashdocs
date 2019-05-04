@@ -28,22 +28,26 @@ class SMASHDOCs {
         }
     }
 
-    get_token() {
+    get_token(user_id='') {
         var iat = Math.round(new Date().getTime() / 1000);
         var payload = {
             'iat': iat,
             'iss': uuidV4(),
             'jti': uuidV4(),
         };
+        if (user_id.length > 0) {
+            payload['iss'] = user_id;
+        }
+
         var token = jwt.encode(this.client_key, payload);
         return token.value;
     }
 
-    headers() {
+    headers(user_id='') {
         return {
             'x-client-id': this.client_id,
             'content-type': 'application/json',
-            'authorization': 'Bearer ' + this.get_token()
+            'authorization': 'Bearer ' + this.get_token(user_id)
         }
     }
 
@@ -349,7 +353,7 @@ class SMASHDOCs {
         var options = {
             url: url,
             json: data,
-            headers: this.headers(),
+            headers: this.headers(user_id),
         };
 
         var suffix = (['sdxml', 'html'].indexOf(format) != -1) ? 'zip' : format;
