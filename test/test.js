@@ -16,6 +16,8 @@ describe('SmashdocsTests', function() {
     var debug = process.env.SMASHDOCS_DEBUG;
     var group_id = 'sample-grp';
     var sd = new SMASHDOCs(partner_url, client_id, client_key, group_id, debug);
+
+    this.retries(RETRIES);
         
     var user_data = {
         'firstname': 'Hans',
