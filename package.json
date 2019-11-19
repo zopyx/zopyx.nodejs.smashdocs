@@ -7,7 +7,7 @@
     "chai": "*",
     "chai-string": "*",
     "deasync": "^0.1.9",
-    "json-web-token": "*",
+    "json-web-token": "^3.2.0",
     "mocha": "*",
     "path.join": "*",
     "querystring": "*",
