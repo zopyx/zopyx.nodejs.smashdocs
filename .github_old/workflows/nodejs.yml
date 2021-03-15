@@ -1,0 +1,33 @@
+name: Node CI
+
+on: 
+    push:
+
+    schedule:
+        # * is a special character in YAML so you have to quote this string
+        - cron:  '0 12 * * *'
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install, build, and test
+      env:
+        SMASHDOCS_CLIENT_ID:   ${{ secrets.SMASHDOCS_CLIENT_ID }}
+        SMASHDOCS_CLIENT_KEY:  ${{ secrets.SMASHDOCS_CLIENT_KEY }}
+        SMASHDOCS_PARTNER_URL: ${{ secrets.SMASHDOCS_PARTNER_URL }}
+        CI: true
+      run: |
+        npm install
+        npm update
+        npm test

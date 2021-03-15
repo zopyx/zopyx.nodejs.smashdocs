@@ -4,15 +4,15 @@
   "description": "SMASHDOCs integration",
   "main": "t.js",
   "dependencies": {
-    "deasync": "^0.1.9",
-    "json-web-token": "^2.1.3",
-    "request": "^2.81.0",
-    "uuid": "^3.0.1",
     "chai": "*",
-    "mocha": "*",
     "chai-string": "*",
+    "deasync": "^0.1.9",
+    "json-web-token": "^3.2.0",
+    "mocha": "*",
     "path.join": "*",
-    "querystring": "*"
+    "querystring": "*",
+    "request": "^2.81.0",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {},
   "scripts": {
